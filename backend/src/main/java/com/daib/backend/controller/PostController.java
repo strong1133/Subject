@@ -2,19 +2,22 @@ package com.daib.backend.controller;
 
 import com.daib.backend.domain.board.Post;
 import com.daib.backend.dto.PostRequestDto;
+import com.daib.backend.dto.PostResponseDto;
 import com.daib.backend.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class PostController {
-    private PostService postService;
+    private final PostService postService;
 
 
     @GetMapping("/boards")
-    public Page<Post> getPosts(@RequestParam int page){
+    public PostResponseDto getPosts(@RequestParam int page){
         return postService.getPosts(page);
     }
 

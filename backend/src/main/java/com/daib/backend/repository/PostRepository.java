@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
-    Page<Post> findAllByDeleteCheck(Pageable pageable, boolean deleteCheck);
+    Page<Post> findAllByDeleteCheck(Pageable PageRequest, boolean deleteCheck);
 
 
 }
