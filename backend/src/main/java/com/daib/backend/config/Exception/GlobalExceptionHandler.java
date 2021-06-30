@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
     public Map<String, String> handleException (Exception e){
         Map<String, String> map = new HashMap<>();
         if (e.getMessage()==null){
-            map.put("msg","잘못된 접근입니다.");
+            map.put("msg","잘못된 접근입니다!");
         }else {
             map.put("msg",e.getMessage());
         }
