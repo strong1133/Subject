@@ -11,7 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity //스프링 Security
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
@@ -26,6 +26,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/css/**").permitAll()
                 .antMatchers("/js/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
+                .antMatchers("/swagger**").permitAll()
+                .antMatchers("/swagger-resources/**",
+                        "/v2/**",
+                        "/webjars/**").permitAll()
                 .antMatchers("/signup").permitAll()
                 .anyRequest().authenticated()
                 .and()

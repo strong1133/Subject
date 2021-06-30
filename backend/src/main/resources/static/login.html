@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="KR"
+      xmlns:th="http://www.thymeleaf.or"
+      xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -32,7 +34,14 @@
         <div class="contents">
           <form action="/login" method="post" class="form">
             <div class="form__title">
-              <h1 class="login__title">SJ_Blog</h1>
+              <h1 class="login__title">다이브 과제</h1>
+              <div
+                      th:if="${loginError}"
+                      class="alert alert-danger"
+                      role="alert"
+              >
+                아이디 또는 패스워드가 잘못되었습니다.
+              </div>
             </div>
             <div class="form__inputs">
               <input type="text" name="username" id="id" placeholder="ID" />

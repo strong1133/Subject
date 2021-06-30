@@ -42,7 +42,6 @@ public class UserService {
         User user = new User(userRequestDto);
         userRepository.save(user);
         System.out.println("회원가입완료");
-
         return user;
     }
 

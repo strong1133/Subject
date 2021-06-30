@@ -20,7 +20,7 @@ function navBtn(){
     $('.nav-pen').on('click',function (){
         if ($('.link-signup').text() == "회원 가입하러 가기" ){
             alert("게시물 작성을 위해선 로그인을 해야합니다.")
-            window.location.href="/user/login"
+            window.location.href="/signup"
             return;
         }
         $('.contents__container').hide();
@@ -28,17 +28,17 @@ function navBtn(){
     })
     $('.nav-key').on('click',function (){
         if ($('.link-signup').text() == "회원 가입하러 가기" ){
-            window.location.href="/login"
+            window.location.href="/signup"
             return;
         }
         alert('로그아웃 되었습니다. 감사합니다.')
-        window.location.href="/user/logout"
+        window.location.href="/logout"
     })
 }
 function logout(){
     $('.fa-sign-out-alt').on('click',function(){
         alert('로그아웃 되었습니다. 감사합니다.')
-        window.location.href="/user/logout"
+        window.location.href="/logout"
     })
 }
 
@@ -46,7 +46,7 @@ function showHide() {
     $('#posting-pen').on('click', function () {
         if ($('.link-signup').text() == "회원 가입하러 가기" ){
             alert("게시물 작성을 위해선 로그인을 해야합니다.")
-            window.location.href="/user/login"
+            window.location.href="/login"
             return;
         }
         $('.contents__container').hide();
@@ -80,29 +80,29 @@ function postArticle() {
         return
     }
     let data = {'username': username, 'title': title, 'contents': contents}
-    $.ajax({
-        type:'POST',
-        url:'/api/articles',
-        contentType:'application/json',
-        data: JSON.stringify(data),
-        success: function (response){
-            alert("게시물 작성이 완료 되었습니다!")
-            window.location.reload()
-        }
-    })
+    // $.ajax({
+    //     type:'POST',
+    //     url:'/api/articles',
+    //     contentType:'application/json',
+    //     data: JSON.stringify(data),
+    //     success: function (response){
+    //         alert("게시물 작성이 완료 되었습니다!")
+    //         window.location.reload()
+    //     }
+    // })
 }
 
 function getArticle(){
-    $.ajax({
-        type:'GET',
-        url:'/api/articles',
-        success: function (response){
-            for(let i=0; i<response.length; i++){
-                let articles = response[i]
-                addArticle(articles['id'], articles['username'], articles['title'], articles['contents'], articles['modifiedAt'])
-            }
-        }
-    })
+    // $.ajax({
+    //     type:'GET',
+    //     url:'/api/articles',
+    //     success: function (response){
+    //         for(let i=0; i<response.length; i++){
+    //             let articles = response[i]
+    //             addArticle(articles['id'], articles['username'], articles['title'], articles['contents'], articles['modifiedAt'])
+    //         }
+    //     }
+    // })
 }
 function addArticle(id, username, title, contents, modifiedAt){
     let tempHtml = `<div class="card">
