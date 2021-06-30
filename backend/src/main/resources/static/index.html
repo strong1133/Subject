@@ -88,9 +88,13 @@
         <div class="posting__contianer">
           <div class="posting__contianer__wrap">
             <div class="posting__contianer-title">
-<!--              <p-->
-<!--                class="input-name"-->
-<!--              ><div th:if="${username}"><div class="cur_username" th:text="${username}"></div></div></p>-->
+              <div class="input-name">
+                <div th:if="${username}">
+                  <div class="cur_username" th:text="${username}">
+
+                  </div>
+                </div>
+              </div>
               <input
                 class="input-title"
                 type="text"
