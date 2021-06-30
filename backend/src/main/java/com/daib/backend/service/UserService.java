@@ -36,7 +36,7 @@ public class UserService {
         }
         System.out.println("username, password => 유효성 검사 통과");
 
-        String encodedPassword = passwordEncoder.encode(rawPassword+SCERET_KEY);
+        String encodedPassword = passwordEncoder.encode(rawPassword);
 
         userRequestDto.setPassword(encodedPassword);
         User user = new User(userRequestDto);

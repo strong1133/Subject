@@ -8,3 +8,8 @@ spring:
     console:
       enabled: true
 
+---
+
+spring:
+ thymeleaf:
+   prefix: classpath:/static/

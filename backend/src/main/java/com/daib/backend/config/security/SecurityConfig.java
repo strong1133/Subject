@@ -2,6 +2,7 @@ package com.daib.backend.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,7 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-//@EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){return new BCryptPasswordEncoder();}
@@ -25,17 +26,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/css/**").permitAll()
                 .antMatchers("/js/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
-                .antMatchers("/user/**").permitAll()
+                .antMatchers("/signup").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/user/login")
-                .failureUrl("/user/login/error")
-                .loginProcessingUrl("/user/login")
+                .loginPage("/login")
+                .failureUrl("/login/error")
+                .loginProcessingUrl("/login")
                 .permitAll()
                 .and()
                 .logout()
-                .logoutUrl("/user/logout").logoutSuccessUrl("/")
+                .logoutUrl("/logout").logoutSuccessUrl("/")
                 .permitAll();
+    }
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception{
+        return super.authenticationManagerBean();
     }
 }
