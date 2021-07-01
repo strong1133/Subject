@@ -35,7 +35,9 @@ public class PostService {
     //전체 Post 반환 -> 페이징
     @Transactional
     public PostResponseDto getPosts(int page) {
-        Page<Post> postPage = postRepository.findAllByDeleteCheck(PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "createdAt")), false);
+        Page<Post> postPage = postRepository.findAllByDeleteCheck(PageRequest.of(
+                page - 1, 10, Sort.by(Sort.Direction.DESC, "createdAt")),
+                false);
         Long maxPageNum =  maxPageNum();
         return new PostResponseDto(maxPageNum, postPage.getContent());
     }
@@ -57,6 +59,7 @@ public class PostService {
     public String updatePost(Long id, PostUpdateDto postUpdateDto) {
         Post post = findPostById(id);
         post.updatePost(postUpdateDto);
+        System.out.println(post.getId()+" 번 게시물 수정 완료");
         return "success";
     }
 
@@ -64,8 +67,8 @@ public class PostService {
     @Transactional
     public String deletePost(Long id) {
         Post post = findPostById(id);
-        post.setContent(null);
-        post.setDeleteCheck(true);
+        post.deletePost();
+        System.out.println(post.getId()+" 번 게시물 삭제 완료");
         return "success";
     }
 

@@ -53,4 +53,10 @@ public class Post {
         this.title = postUpdateDto.getTitle();
         this.content = postUpdateDto.getContent();
     }
+
+    // post 삭제 메서드
+    public void deletePost(){
+        this.content = "삭제된 게시물 입니다.";
+        this.deleteCheck = true;
+    }
 }
