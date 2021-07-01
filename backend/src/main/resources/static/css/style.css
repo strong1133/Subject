@@ -257,3 +257,14 @@ textarea:focus {
 .main-title{
   cursor: pointer;
 }
+.page__index{
+  text-align: center;
+  margin-top: 40px;
+}
+
+.page-num{
+  margin: 10px 20px 0 0;
+}
+.page-num.active{
+  color: #4c89b5;
+}

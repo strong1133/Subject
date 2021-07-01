@@ -1,6 +1,8 @@
 package com.daib.backend.service;
 
+import com.daib.backend.config.security.UserDetailsImpl;
 import com.daib.backend.domain.board.Post;
+import com.daib.backend.domain.board.User;
 import com.daib.backend.dto.PostRequestDto;
 import com.daib.backend.dto.PostResponseDto;
 import com.daib.backend.dto.PostUpdateDto;
@@ -19,10 +21,13 @@ import java.util.List;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final UserService userService;
 
     public Post findPostById(Long id) {
         return postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
     }
+
+
 
     // Post 작성
     @Transactional
@@ -56,8 +61,16 @@ public class PostService {
 
     // 특정 Post 수정
     @Transactional
-    public String updatePost(Long id, PostUpdateDto postUpdateDto) {
+    public String updatePost(Long id, PostUpdateDto postUpdateDto, UserDetailsImpl userDetails) {
+        //User 정보
+        User user = userService.getUser(userDetails);
+
         Post post = findPostById(id);
+
+        if(!post.getWriter().equals(user.getUsername())){
+            throw new IllegalArgumentException("본인의 글만 수정이 가능합니다.");
+        }
+
         post.updatePost(postUpdateDto);
         System.out.println(post.getId()+" 번 게시물 수정 완료");
         return "success";
@@ -65,8 +78,16 @@ public class PostService {
 
     // 특정 Post 삭제
     @Transactional
-    public String deletePost(Long id) {
+    public String deletePost(Long id, UserDetailsImpl userDetails) {
+        //User 정보
+        User user = userService.getUser(userDetails);
+
         Post post = findPostById(id);
+
+        if(!post.getWriter().equals(user.getUsername())){
+            throw new IllegalArgumentException("본인의 글만 삭제 가능합니다.");
+        }
+
         post.deletePost();
         System.out.println(post.getId()+" 번 게시물 삭제 완료");
         return "success";

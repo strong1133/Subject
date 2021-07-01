@@ -1,5 +1,6 @@
 package com.daib.backend.service;
 
+import com.daib.backend.config.security.UserDetailsImpl;
 import com.daib.backend.config.util.SignupValidator;
 import com.daib.backend.domain.board.User;
 import com.daib.backend.dto.UserRequestDto;
@@ -18,6 +19,13 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final SignupValidator signupValidator;
     private static final String SCERET_KEY = "asd123cdf*sd23%^&f";
+
+    // 현재 로그인한 유저 정보 반환
+    public User getUser(UserDetailsImpl userDetails){
+        return userDetails.getUser();
+    }
+
+
 
     //회원가입
     public User registerUser(UserRequestDto userRequestDto){

@@ -1,11 +1,16 @@
 $(document).ready(function () {
     showHide()
     $('.card__container').empty()
-    getArticle();
+    getArticle(1);
+
     logout();
     goHome();
     navBtn();
 })
+function getPageNum(num){
+    // console.log("pageNum"+num)
+    getArticle(num)
+}
 
 function goHome(){
     $('.main-title').on('click',function (){
@@ -69,40 +74,48 @@ function postArticle() {
     let username = $('.cur_username').text()
     let title = $('.input-title').val()
     let contents = $('.posting-textarea').val()
-    if (username == '') {
+    if (username === '') {
         alert('이름을 적어주세요!')
         return;
-    } else if (title == '') {
+    } else if (title === '') {
         alert('제목을 적어주세요!')
         return
-    } else if (contents == '') {
+    } else if (contents === '') {
         alert('내용을 적어주세요!')
         return
     }
-    let data = {'username': username, 'title': title, 'contents': contents}
-    // $.ajax({
-    //     type:'POST',
-    //     url:'/api/articles',
-    //     contentType:'application/json',
-    //     data: JSON.stringify(data),
-    //     success: function (response){
-    //         alert("게시물 작성이 완료 되었습니다!")
-    //         window.location.reload()
-    //     }
-    // })
+    let data = {'title': title, 'content': contents,'writer': username,}
+    $.ajax({
+        type:'POST',
+        url:'/boards',
+        contentType:'application/json',
+        data: JSON.stringify(data),
+        success: function (response){
+            alert("게시물 작성이 완료 되었습니다!")
+            window.location.reload()
+        }
+    })
 }
 
-function getArticle(){
-    // $.ajax({
-    //     type:'GET',
-    //     url:'/api/articles',
-    //     success: function (response){
-    //         for(let i=0; i<response.length; i++){
-    //             let articles = response[i]
-    //             addArticle(articles['id'], articles['username'], articles['title'], articles['contents'], articles['modifiedAt'])
-    //         }
-    //     }
-    // })
+function getArticle(pageNum){
+    $.ajax({
+        type:'GET',
+        url:`/boards?page=${pageNum}`,
+        success: function (response){
+            $('.card__container').empty();
+            $('.page__index').empty();
+            let boardsList = response.postList;
+            let maxPageNum = response.maxPageNum;
+            console.log(maxPageNum)
+            for(let i=0; i<boardsList.length; i++){
+                let board = boardsList[i]
+                addArticle(board['id'], board['writer'], board['title'], board['content'], board['createdAt'])
+            }
+            for(let i=1; i<=maxPageNum; i++){
+                addPageIndex(i, pageNum)
+            }
+        }
+    })
 }
 function addArticle(id, username, title, contents, modifiedAt){
     let tempHtml = `<div class="card">
@@ -119,4 +132,13 @@ function addArticle(id, username, title, contents, modifiedAt){
                     </div>
                 </div>`
     $('.card__container').append(tempHtml)
+}
+function addPageIndex(num, pageNum){
+    let tempHtml
+    if (num === pageNum){
+        tempHtml=`<a href="#/boards?page=${num}" onclick="getPageNum(${num})" id="page-${num}" class="page-num active">${num}</a>`
+    }else{
+        tempHtml=`<a href="#/boards?page=${num}" onclick="getPageNum(${num})" id="page-${num}" class="page-num">${num}</a>`
+    }
+    $('.page__index').append(tempHtml)
 }

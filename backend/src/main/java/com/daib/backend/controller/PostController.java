@@ -1,5 +1,6 @@
 package com.daib.backend.controller;
 
+import com.daib.backend.config.security.UserDetailsImpl;
 import com.daib.backend.domain.board.Post;
 import com.daib.backend.dto.PostRequestDto;
 import com.daib.backend.dto.PostResponseDto;
@@ -7,6 +8,7 @@ import com.daib.backend.dto.PostUpdateDto;
 import com.daib.backend.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,14 +32,14 @@ public class PostController {
 
     //Post Update
     @PutMapping("/boards/{id}")
-    public String updatePost(@PathVariable Long id, @RequestBody PostUpdateDto postUpdateDto){
-        return postService.updatePost(id, postUpdateDto);
+    public String updatePost(@PathVariable Long id, @RequestBody PostUpdateDto postUpdateDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return postService.updatePost(id, postUpdateDto, userDetails);
     }
 
     //Post Delete
     @DeleteMapping("/boards/{id}")
-    public String deletePost(@PathVariable Long id){
-        return postService.deletePost(id);
+    public String deletePost(@PathVariable Long id,  @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return postService.deletePost(id, userDetails);
     }
 
 }
