@@ -33,7 +33,7 @@ function navBtn(){
     })
     $('.nav-key').on('click',function (){
         if ($('.link-signup').text() == "회원 가입하러 가기" ){
-            window.location.href="/signup"
+            window.location.href="/login"
             return;
         }
         alert('로그아웃 되었습니다. 감사합니다.')

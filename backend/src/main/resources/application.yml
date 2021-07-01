@@ -1,4 +1,5 @@
 spring:
+  profiles: dev
   datasource:
     driver-class-name:
     url: jdbc:h2:mem:testdb
@@ -7,9 +8,28 @@ spring:
   h2:
     console:
       enabled: true
+  thymeleaf:
+    prefix: classpath:/static/
+
+server:
+  port: 8080
 
 ---
 
 spring:
- thymeleaf:
-   prefix: classpath:/static/
+  profiles: operation
+  thymeleaf:
+    prefix: classpath:/static/
+  datasource:
+    url: jdbc:mysql://strong1133.cizleuoo6ppg.ap-northeast-2.rds.amazonaws.com/strong1133DB
+    username: strong1133
+    password: tjrwls455
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+server:
+  port: 8080
+
+
+

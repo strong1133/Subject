@@ -36,6 +36,7 @@ public class CommentService {
         Post post = postService.findPostById(commentRequestDto.getPostId());
         Comment comment = new Comment(commentRequestDto, post);
         commentRepository.save(comment);
+        System.out.println("댓글 작성 완료");
         return comment;
     }
 
