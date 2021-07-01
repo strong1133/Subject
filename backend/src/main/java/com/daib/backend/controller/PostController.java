@@ -42,4 +42,9 @@ public class PostController {
         return postService.deletePost(id, userDetails);
     }
 
+    //Post Read -> Details
+    @GetMapping("/boards/{id}")
+    public Post getPostDetails(@PathVariable Long id){
+        return postService.getPostDetails(id);
+    }
 }

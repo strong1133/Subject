@@ -26,25 +26,25 @@ function getDetail(id) {
     let idx = id
     $.ajax({
         type: 'GET',
-        url: `/api/detail/${idx}`,
+        url: `/boards/${idx}`,
         success: function (response) {
-            addDetail(response['id'], response['username'], response['title'], response['contents'], response['modifiedAt'])
+            addDetail(response['id'], response['writer'], response['title'], response['content'], response['createdAt'])
         }
     })
 }
 
-function addDetail(id, username, title, contents, modifiedAt) {
+function addDetail(id, writer, title, content, createdAt) {
     let tempHtml = `<div class ="detail">
     <div class="content-header">
           <h1 class="title">${title}</h1>
           <p class="post-author">
-            <span class="username">${username}</span> <span class="post-date">| ${modifiedAt}</span>
+            <span class="username">${writer}</span> <span class="post-date">| ${createdAt}</span>
           </p>
           <hr />
         </div>
         <div class="content-body">
           <p class="contents">
-            ${contents}
+            ${content}
           </p>
         </div>
     </div>`
@@ -90,10 +90,10 @@ function editArticle() {
         alert("수정하실 내용을 적어 주세요!")
         return;
     }
-    let data = {'username': username, 'title': title, 'contents': contents}
+    let data = {'writer': username, 'title': title, 'content': contents}
     $.ajax({
         type: "PUT",
-        url: `/api/articles/${id}`,
+        url: `/boards/${id}`,
         contentType: 'application/json',
         data: JSON.stringify(data),
         success: function (response) {
@@ -116,7 +116,7 @@ function deleteArticle() {
         let id = location.search.split('=')[1]
         $.ajax({
             type: "DELETE",
-            url:`/api/articles/${id}`,
+            url:`/boards/${id}`,
             success:function (response){
                 alert("삭제 되었습니다.")
                 window.location.href = "/"
@@ -139,18 +139,18 @@ function create_comment() {
     }
     let data = {'article_id':article_id, 'username':name, 'contents':contents};
 
-    $.ajax({
-        type:'POST',
-        url:'/api/comments',
-        contentType: 'application/json',
-        data: JSON.stringify(data),
-        success: function (response){
-            console.log(data)
-            alert('댓글이 성공적으로 작성되었습니다!')
-            window.location.reload();
-        }
-
-    })
+    // $.ajax({
+    //     type:'POST',
+    //     url:'/api/comments',
+    //     contentType: 'application/json',
+    //     data: JSON.stringify(data),
+    //     success: function (response){
+    //         console.log(data)
+    //         alert('댓글이 성공적으로 작성되었습니다!')
+    //         window.location.reload();
+    //     }
+    //
+    // })
 }
 
 

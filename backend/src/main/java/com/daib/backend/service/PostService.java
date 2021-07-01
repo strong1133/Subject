@@ -93,4 +93,8 @@ public class PostService {
         return "success";
     }
 
+    public Post getPostDetails(Long id){
+        return findPostById(id);
+    }
+
 }

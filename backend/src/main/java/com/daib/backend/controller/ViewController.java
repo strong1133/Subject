@@ -39,4 +39,15 @@ public class ViewController {
 
     @GetMapping("/signup")
     public String signup(){return "signup";}
+
+    @GetMapping("/detail")
+    public String detail(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        if (userDetails != null) {
+            String username = userDetails.getUsername();
+            model.addAttribute("username", username);
+            return "detail";
+        }
+        model.addAttribute("message", "null");
+        return "detail";
+    }
 }
