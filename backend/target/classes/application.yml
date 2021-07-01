@@ -8,6 +8,8 @@ spring:
   h2:
     console:
       enabled: true
+  jpa:
+    show-sql: true
   thymeleaf:
     prefix: classpath:/static/
 
@@ -27,7 +29,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
 server:
   port: 8080
 
