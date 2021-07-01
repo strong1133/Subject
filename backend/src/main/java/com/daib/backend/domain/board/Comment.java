@@ -1,6 +1,7 @@
 package com.daib.backend.domain.board;
 
 import com.daib.backend.dto.CommentRequestDto;
+import com.daib.backend.dto.CommentUpdateDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,4 +39,15 @@ public class Comment {
         this.writer = commentRequestDto.getWriter();
         this.content = commentRequestDto.getContent();
     }
+
+    // Comment 삭제 메서드
+    public void updateComment(CommentUpdateDto commentUpdateDto){
+        this.content = commentUpdateDto.getContent();
+    }
+
+    // Comment 삭제 메서드
+    public void deleteComment(){
+        this.content = "삭제된 댓글 입니다.";
+    }
+
 }

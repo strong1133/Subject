@@ -23,11 +23,10 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserService userService;
 
+    // Id 값에 해당 하는 Post 반환 매서드
     public Post findPostById(Long id) {
         return postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
     }
-
-
 
     // Post 작성
     @Transactional

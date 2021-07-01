@@ -259,3 +259,16 @@ textarea:focus {
 .after {
   display: none;
 }
+.page__index{
+  text-align: center;
+}
+.page-num{
+  background-color: white;
+  border: none;
+  color:black;
+  font-size: 15px;
+  margin-top: 5px;
+}
+.page-num.active{
+  color: #4c89b5;
+}

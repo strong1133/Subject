@@ -106,7 +106,6 @@ function getArticle(pageNum){
             $('.page__index').empty();
             let boardsList = response.postList;
             let maxPageNum = response.maxPageNum;
-            console.log(maxPageNum)
             for(let i=0; i<boardsList.length; i++){
                 let board = boardsList[i]
                 addArticle(board['id'], board['writer'], board['title'], board['content'], board['createdAt'])

@@ -13,7 +13,12 @@ $(document).ready(function () {
 function getId() {
     let id = location.search.split('=')[1]
     getDetail(id)
-    getComment(id)
+    getComment(id,1)
+}
+function getPageNum(num){
+    // console.log("pageNum"+num)
+    let id = location.search.split('=')[1]
+    getComment(id, num)
 }
 
 function backHome() {
@@ -126,58 +131,76 @@ function deleteArticle() {
 }
 
 function create_comment() {
-    let article_id = location.search.split('=')[1]
-    let name = $('.username01').text();
-    let contents = $('.post__comment-textarea').val();
-    if (!name || $('.link-signup').text() == '로그인 하러 가기') {
+    let postId = location.search.split('=')[1]
+    let writer = $('.username01').text();
+    let content = $('.post__comment-textarea').val();
+    if (!writer || $('.link-signup').text() == '로그인 하러 가기') {
         alert("로그인을 하셔야 댓글을 달수 있습니다!")
         return;
     }
-    if (contents == '') {
+    if (content == '') {
         alert("댓글을 적어주세요!!")
         return
     }
-    let data = {'article_id':article_id, 'username':name, 'contents':contents};
+    let data = {'postId':postId, 'writer':writer, 'content':content};
 
-    // $.ajax({
-    //     type:'POST',
-    //     url:'/api/comments',
-    //     contentType: 'application/json',
-    //     data: JSON.stringify(data),
-    //     success: function (response){
-    //         console.log(data)
-    //         alert('댓글이 성공적으로 작성되었습니다!')
-    //         window.location.reload();
-    //     }
-    //
-    // })
+    $.ajax({
+        type:'POST',
+        url:'/comment',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function (response){
+            console.log(data)
+            alert('댓글이 성공적으로 작성되었습니다!')
+            window.location.reload();
+        }
+
+    })
 }
 
 
-function getComment(id) {
-    let index = id
+function getComment(id, pageNum) {
     $.ajax({
         type: 'GET',
-        url: `/api/comment/${index}`,
+        url: `/comment?postId=${id}&page=${pageNum}`,
         success: function (response) {
-            for(let i=0; i< response.length; i++){
+            $('.comment__card-box').empty();
+            $('.page__index').empty();
+
+
+            let commentList = response.commentList;
+            let maxPageNum = response.maxPageNum;
+            for(let i=0; i< commentList.length; i++){
                 console.log(response[i])
-                let comment = response[i];
+                let comment = commentList[i];
                 let tempHtml = addComments(comment)
                 $('.comment__card-box').append(tempHtml);
             }
+            for(let i=1; i<=maxPageNum; i++){
+                addPageIndex(i, pageNum)
+            }
         }
     });
+
+}
+function addPageIndex(num, pageNum){
+    let tempHtml
+    if (num === pageNum){
+        tempHtml=`<button  onclick="getPageNum(${num})" id="page-${num}" class="page-num active">${num}</button>`
+    }else{
+        tempHtml=`<button onclick="getPageNum(${num})" id="page-${num}" class="page-num">${num}</button>`
+    }
+    $('.page__index').append(tempHtml)
 }
 
 function addComments(comment){
     return `<div class="comment__card">
             <div class="comment__card-header">
-              <span id="${comment.id}-comment_user">${comment.username}</span><span class="comment-date">${comment.modifiedAt}</span>
+              <span id="${comment.id}-comment_user">${comment.writer}</span><span class="comment-date">${comment.createdAt}</span>
             </div>
             <div class="comment__card-body">
               <div class="edit-comment-wrap">
-                <div id="${comment.id}-comment" class="comment">${comment.contents}</div>
+                <div id="${comment.id}-comment" class="comment">${comment.content}</div>
                 <textarea
                   class="edit-comment-textarea"
                   id="${comment.id}-edit-comment-textarea"
@@ -219,18 +242,18 @@ function edit_start_comment(id){
 }
 
 function edit_comment(id){
-    let article_id = location.search.split('=')[1]
-    let username = $('.username01').text()
-    let contents = $(`#${id}-edit-comment-textarea`).val()
-    if(contents===''){
+    let postId = location.search.split('=')[1]
+    let writer = $('.username01').text()
+    let content = $(`#${id}-edit-comment-textarea`).val()
+    if(content===''){
         alert('수정하실 내용을 작성 해주세요!')
         return;
     }
-    let data = {'article_id':article_id,'username':username,'contents':contents}
+    let data = {'postId':postId,'writer':writer,'content':content}
 
     $.ajax({
         type:'PUT',
-        url:`/api/comments/${id}`,
+        url:`/comment/${id}`,
         contentType:'application/json',
         data:JSON.stringify(data),
         success:function (response){
@@ -260,7 +283,7 @@ function delete_comment(id){
     }
     $.ajax({
         type:'DELETE',
-        url:`api/comments/${id}`,
+        url:`/comment/${id}`,
         success: function (response){
             alert('댓글이 삭제 되었습니다.')
             window.location.reload();

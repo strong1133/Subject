@@ -63,16 +63,18 @@
       </div>
 
       <div class="comments-container">
+
         <div class="show_username">
           <div th:if="!${username}">
             로그인 하셔야 댓글을 달수 있습니다! <br />
-            <a href="/user/login" class="link-signup">로그인 하러 가기</a>
+            <a href="/login" class="link-signup">로그인 하러 가기</a>
           </div>
           <div th:if="${username}">
             반갑습니다! &nbsp
             <div th:text="${username}" class="username01"></div>
           </div>
         </div>
+
         <div class="post__comment">
           <textarea
             class="post__comment-textarea"
@@ -89,7 +91,9 @@
           </div>
         </div>
 
+
         <div class="comment__card-box">
+
           <div class="comment__card">
             <div class="comment__card-header">
               username<span class="comment-date">2021-03-29</span>
@@ -144,7 +148,13 @@
               </div>
             </div>
           </div>
+
+          </div>
+        <div class="page__index">
+
         </div>
+
+
       </div>
 
       <div class="footer">
