@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html
-  lang="en"
-  xmlns:th="http://www.thymeleaf.or"
-  xmlns="http://www.w3.org/1999/xhtml"
->
+  lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -67,11 +64,7 @@
         <div class="show_username">
           <div th:if="!${username}">
             로그인 하셔야 댓글을 달수 있습니다! <br />
-            <a href="/login" class="link-signup">로그인 하러 가기</a>
-          </div>
-          <div th:if="${username}">
-            반갑습니다! &nbsp
-            <div th:text="${username}" class="username01"></div>
+            <a href="/signin" class="link-signup">로그인 하러 가기</a>
           </div>
         </div>
 

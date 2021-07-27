@@ -44,21 +44,14 @@ public class PostService {
         Page<Post> postPage = postRepository.findAllByDeleteCheck(PageRequest.of(
                 page - 1, 10, Sort.by(Sort.Direction.DESC, "createdAt")),
                 false);
-        Long maxPageNum =  maxPageNum();
-        return new PostResponseDto(maxPageNum, postPage.getContent());
+        Long maxPageNum = pagination.maxPageNum();
+        Long starPageNum =pagination.starPageNum(page);
+        boolean prevBtn = pagination.prevBtn(page);
+        boolean nextBtn = pagination.nextBtn(page);
+        return new PostResponseDto(maxPageNum,  starPageNum, postPage.getContent(), prevBtn, nextBtn);
     }
 
-    // 총 페이지 수 반환
-    public Long maxPageNum() {
-        int nums = (int) postRepository.count();
-        int maxPageNum =1;
-        if (nums % 10 == 0){
-            maxPageNum = nums/10;
-        }else{
-            maxPageNum = (nums/10) +1;
-        }
-        return (long) maxPageNum;
-    }
+
 
     // 특정 Post 수정
     @Transactional

@@ -13,6 +13,8 @@ function blank_check(username, password, name){
 
 }
 
+
+
 function doRegister() {
     let username = $('#signup__id').val();
     let password = $('#signup__pw').val();
@@ -30,11 +32,35 @@ function doRegister() {
         data:JSON.stringify(data),
 
         success: function (response){
-            location.href='/login'
+            console.log(response)
+            location.href='/signin'
         },
         error: function (request, thrownError){
             let err = JSON.parse(request.responseText);
             alert(err.msg);
+        }
+    })
+}
+
+function login(){
+    let id = $('#id').val();
+    let pw = $('#pw').val();
+
+    let data ={'username':id, 'password':pw}
+
+    $.ajax({
+        type:'POST',
+        url:'/login',
+        contentType:'application/json',
+        data:JSON.stringify(data),
+        success: function(data, request, xhr){
+            let token = xhr.getResponseHeader("Authorization");
+            console.log(token)
+            setCookie('jwt',token,1);
+            location.href ="/"
+        },
+        error: function(){
+            $('.alert').show();
         }
     })
 }

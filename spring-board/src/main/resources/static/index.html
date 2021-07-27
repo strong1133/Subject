@@ -36,11 +36,11 @@
           <img class="avartar" src="images/SJ_Main.png" alt="" />
         </div>
         <div class="show_username">
-          <div th:if="!${username}">
+          <div>
             아직 회원이 아니시군요? <br />
             <a href="/signup" class="link-signup">회원 가입하러 가기</a>
           </div>
-          <div th:if="${username}"><div th:text="${username}" class="fas fa-sign-out-alt"></div></div>
+          
         </div>
         <div class="left__container-footer">
           <i class="fas fa-key footer-btn nav-key"></i>
@@ -74,8 +74,12 @@
               </div>
             </div>
           </div>
+          <div class="page__index__container">
+            <button class="prev" onclick="goPrev()"> < </button>
           <div class="page__index">
-
+            
+          </div>
+          <button class="next" onclick="goNext()"> > </button>
           </div>
         </div>
 

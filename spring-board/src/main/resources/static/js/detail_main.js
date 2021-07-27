@@ -4,11 +4,17 @@ $(document).ready(function () {
     showHide()
     deleteArticle()
     $('.comment__card-box').empty();
-
+    
 
     let rn = Math.floor(Math.random() * 4) + 1;
     $('.header').addClass('header'+ rn);
+    getName2();
 })
+
+const getCookie = function(name){
+    let value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+    return value? value[2] : null;
+}
 
 function getId() {
     let id = location.search.split('=')[1]
@@ -95,11 +101,15 @@ function editArticle() {
         alert("수정하실 내용을 적어 주세요!")
         return;
     }
-    let data = {'writer': username, 'title': title, 'content': contents}
+    let data = {'title': title, 'content': contents}
+    let token = "Bearer "+getCookie('jwt');
     $.ajax({
         type: "PUT",
         url: `/boards/${id}`,
         contentType: 'application/json',
+        headers:{
+            "Authorization":token
+        },
         data: JSON.stringify(data),
         success: function (response) {
             alert("수정이 완료되었습니다!")
@@ -113,6 +123,7 @@ function deleteArticle() {
     $('#delete').on('click', function () {
         let username = $('.username').text()
         let cur_username = $('.username01').text()
+        let token = "Bearer "+getCookie('jwt');
 
         if (cur_username != username){
             alert("자신이 작성한 글만 삭제가 가능합니다!")
@@ -122,6 +133,9 @@ function deleteArticle() {
         $.ajax({
             type: "DELETE",
             url:`/boards/${id}`,
+            headers:{
+                "Authorization":token
+            },
             success:function (response){
                 alert("삭제 되었습니다.")
                 window.location.href = "/"
@@ -142,12 +156,16 @@ function create_comment() {
         alert("댓글을 적어주세요!!")
         return
     }
-    let data = {'postId':postId, 'writer':writer, 'content':content};
+    let data = {'postId':postId, 'content':content};
+    let token = "Bearer "+getCookie('jwt');
 
     $.ajax({
         type:'POST',
         url:'/comment',
         contentType: 'application/json',
+        headers:{
+            "Authorization":token
+        },
         data: JSON.stringify(data),
         success: function (response){
             console.log(data)
@@ -249,13 +267,16 @@ function edit_comment(id){
         alert('수정하실 내용을 작성 해주세요!')
         return;
     }
-    let data = {'postId':postId,'writer':writer,'content':content}
-
+    let data = {'postId':postId,'content':content}
+    let token = "Bearer "+getCookie('jwt');
     $.ajax({
         type:'PUT',
         url:`/comment/${id}`,
         contentType:'application/json',
         data:JSON.stringify(data),
+        headers:{
+            "Authorization":token
+        },
         success:function (response){
             alert('댓글이 수정 되었습니다.')
             window.location.reload();
@@ -276,7 +297,7 @@ function edit_end_comment(id){
 function delete_comment(id){
     let comment_user = $(`#${id}-comment_user`).text()
     let cur_username = $('.username01').text()
-
+    let token = "Bearer "+getCookie('jwt');
     if (comment_user != cur_username){
         alert("본인의 댓글만 삭제하실수 있습니다.")
         return;
@@ -284,9 +305,52 @@ function delete_comment(id){
     $.ajax({
         type:'DELETE',
         url:`/comment/${id}`,
+        headers:{
+            "Authorization":token
+        },
         success: function (response){
             alert('댓글이 삭제 되었습니다.')
             window.location.reload();
         }
     })
+}
+
+
+
+function showUserName2(username){
+    let token = getCookie('jwt')
+    let tempHtml;
+    if (token === null){
+         tempHtml = `<div>
+         로그인 하셔야 댓글을 달수 있습니다! <br />
+         <a href="/signin" class="link-signup">로그인 하러 가기</a>
+       </div>`
+    }
+    else{
+        $('.show_username').empty();
+        tempHtml = `<div>
+        반갑습니다! &nbsp
+        <div class="username01">${username}</div>
+      </div>`
+    }
+    $('.show_username').append(tempHtml);
+}
+
+
+function getName2(){
+    let tokenken ="Bearer "+ getCookie('jwt')
+    let username;
+    $.ajax({
+        type: 'GET',
+        url: '/user',
+        headers:{
+            "Authorization": tokenken
+        },
+        success: function (response){
+            username= response;
+            console.log(username)
+            showUserName2(username)
+        }
+    })
+    return username;
 }

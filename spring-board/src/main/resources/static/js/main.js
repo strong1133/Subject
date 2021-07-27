@@ -9,6 +9,9 @@ $(document).ready(function () {
     navBtn();
 
 })
+
+
+
 function getPageNum(num){
     // console.log("pageNum"+num)
     getArticle(num)
@@ -20,41 +23,11 @@ function goHome(){
     })
 }
 
-function navBtn(){
-    $('.nav-git').on('click',function (){
-        window.location.href="https://github.com/strong1133"
-    })
-    $('.nav-pen').on('click',function (){
-        if ($('.link-signup').text() == "회원 가입하러 가기" ){
-            alert("게시물 작성을 위해선 로그인을 해야합니다.")
-            window.location.href="/signup"
-            return;
-        }
-        $('.contents__container').hide();
-        $('.posting__contianer').show();
-    })
-    $('.nav-key').on('click',function (){
-        if ($('.link-signup').text() == "회원 가입하러 가기" ){
-            window.location.href="/login"
-            return;
-        }
-        alert('로그아웃 되었습니다. 감사합니다.')
-        window.location.href="/logout"
-    })
-}
-function logout(){
-    $('.fa-sign-out-alt').on('click',function(){
-        alert('로그아웃 되었습니다. 감사합니다.')
-        window.location.href="/logout"
-    })
-}
-//sad
-
 function showHide() {
     $('#posting-pen').on('click', function () {
         if ($('.link-signup').text() == "회원 가입하러 가기" ){
             alert("게시물 작성을 위해선 로그인을 해야합니다.")
-            window.location.href="/login"
+            window.location.href="/signin"
             return;
         }
         $('.contents__container').hide();
@@ -72,8 +45,6 @@ function showHide() {
 }
 
 
-
-
 function postArticle() {
     let username = $('.cur_username').text()
     let title = $('.input-title').val()
@@ -88,10 +59,14 @@ function postArticle() {
         alert('내용을 적어주세요!')
         return
     }
-    let data = {'title': title, 'content': contents,'writer': username,}
+    let data = {'title': title, 'content': contents}
+    let token = "Bearer "+getCookie('jwt');
     $.ajax({
         type:'POST',
         url:'/boards',
+        headers:{
+            "Authorization":token
+        },
         contentType:'application/json',
         data: JSON.stringify(data),
         success: function (response){
@@ -101,7 +76,19 @@ function postArticle() {
     })
 }
 
+function goPrev(){
+    let idx = $('.page-num.active').text();
+    getArticle(parseInt(idx)-1)
+}
+function goNext(){
+    let idx = $('.page-num.active').text();
+
+    getArticle(parseInt(idx)+1)
+
+}
+
 function getArticle(pageNum){
+    
     $.ajax({
         type:'GET',
         url:`/boards?page=${pageNum}`,
@@ -110,14 +97,31 @@ function getArticle(pageNum){
             $('.page__index').empty();
             let boardsList = response.postList;
             let maxPageNum = response.maxPageNum;
+            let starPageNum = response.starPageNum;
+            let nextBtn = response.nextBtn;
+            let prevBtn = response.prevBtn;
             for(let i=0; i<boardsList.length; i++){
                 let board = boardsList[i]
                 addArticle(board['id'], board['writer'], board['title'], board['content'], board['createdAt'])
             }
-            for(let i=1; i<=maxPageNum; i++){
+            for(let i=starPageNum; i<=starPageNum+9 && i<= maxPageNum; i++){
                 addPageIndex(i, pageNum)
             }
+            if(pageNum === 1){
+                $('.prev').hide()
+            }else{
+                $('.prev').show()
+            }
+            if(pageNum === maxPageNum){
+                $('.next').hide()
+            }else{
+                $('.next').show()
+            }
+
+            
         }
+
+
     })
 }
 function addArticle(id, username, title, contents, modifiedAt){
@@ -139,7 +143,9 @@ function addArticle(id, username, title, contents, modifiedAt){
 function addPageIndex(num, pageNum){
     let tempHtml
     if (num === pageNum){
-        tempHtml=`<a href="#/boards?page=${num}" onclick="getPageNum(${num})" id="page-${num}" class="page-num active">${num}</a>`
+        tempHtml=`
+        <a href="#/boards?page=${num}" onclick="getPageNum(${num})" id="page-${num}" class="page-num active">${num}</a>
+        `
     }else{
         tempHtml=`<a href="#/boards?page=${num}" onclick="getPageNum(${num})" id="page-${num}" class="page-num">${num}</a>`
     }

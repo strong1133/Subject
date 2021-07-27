@@ -23,6 +23,7 @@
     />
     <link rel="stylesheet" href="/css/login_style.css" />
     <script src="/js/login.js"></script>
+     <script src="js/cook.js"></script>
     <title>Spring 로그인</title>
   </head>
   <body>
@@ -32,14 +33,10 @@
           <a><i class="fab fa-staylinked"></i></a>
         </div>
         <div class="contents">
-          <form action="/login" method="post" class="form">
+          <div class="form">
             <div class="form__title">
               <h1 class="login__title">다이브 과제</h1>
-              <div
-                      th:if="${loginError}"
-                      class="alert alert-danger"
-                      role="alert"
-              >
+              <div class="alert alert-danger">
                 아이디 또는 패스워드가 잘못되었습니다.
               </div>
             </div>
@@ -47,8 +44,8 @@
               <input type="text" name="username" id="id" placeholder="ID" />
               <input type="password" name="password" id="pw" placeholder="PW" />
             </div>
-            <button id="login-btn">로그인</button>
-          </form>
+            <button id="login-btn" onclick="login()">로그인</button>
+          </div>
           <div class="go_signup">
             <p>
               아직 회원이 아니라면? &nbsp&nbsp&nbsp&nbsp
